@@ -1,0 +1,114 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Task {
+    String description;
+    boolean isCompleted;
+
+    public Task(String description) {
+        this.description = description;
+        this.isCompleted = false;
+    }
+
+    public void markAsCompleted() {
+        this.isCompleted = true;
+    }
+
+    @Override
+    public String toString() {
+        return (isCompleted ? "\u001B[32m[✓] \u001B[0m" : "\u001B[31m[ ] \u001B[0m") + description;
+    }
+}
+
+public class ToDoListApp {
+    private static ArrayList<Task> tasks = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            printHeader();
+            System.out.println("\u001B[34m1. Add Task");
+            System.out.println("2. View Tasks");
+            System.out.println("3. Mark Task as Completed");
+            System.out.println("4. Delete Task");
+            System.out.println("5. Exit\u001B[0m");
+            System.out.print("Choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    addTask();
+                    break;
+                case 2:
+                    viewTasks();
+                    break;
+                case 3:
+                    markTaskAsCompleted();
+                    break;
+                case 4:
+                    deleteTask();
+                    break;
+                case 5:
+                    System.out.println("\u001B[35mExiting...\u001B[0m");
+                    return;
+                default:
+                    System.out.println("\u001B[31mInvalid option. Please try again.\u001B[0m");
+            }
+        }
+    }
+
+    private static void printHeader() {
+        System.out.println("\u001B[33m==============================");
+        System.out.println("     TO-DO LIST APPLICATION");
+        System.out.println("==============================\u001B[0m");
+    }
+
+    private static void addTask() {
+        System.out.print("Enter the task description: ");
+        String description = scanner.nextLine();
+        tasks.add(new Task(description));
+        System.out.println("\u001B[32mTask added successfully.\u001B[0m");
+    }
+
+    private static void viewTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("\u001B[31mNo tasks available.\u001B[0m");
+        } else {
+            System.out.println("\n\u001B[33mYour To-Do List:\u001B[0m");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + ". " + tasks.get(i));
+            }
+        }
+    }
+
+    private static void markTaskAsCompleted() {
+        viewTasks();
+        if (!tasks.isEmpty()) {
+            System.out.print("Enter the task number to mark as completed: ");
+            int taskNumber = scanner.nextInt();
+            if (taskNumber > 0 && taskNumber <= tasks.size()) {
+                tasks.get(taskNumber - 1).markAsCompleted();
+                System.out.println("\u001B[32mTask marked as completed.\u001B[0m");
+            } else {
+                System.out.println("\u001B[31mInvalid task number.\u001B[0m");
+            }
+        }
+    }
+
+    private static void deleteTask() {
+        viewTasks();
+        if (!tasks.isEmpty()) {
+            System.out.print("Enter the task number to delete: ");
+            int taskNumber = scanner.nextInt();
+            if (taskNumber > 0 && taskNumber <= tasks.size()) {
+                tasks.remove(taskNumber - 1);
+                System.out.println("\u001B[32mTask deleted successfully.\u001B[0m");
+            } else {
+                System.out.println("\u001B[31mInvalid task number.\u001B[0m");
+            }
+        }
+    }
+}
+
